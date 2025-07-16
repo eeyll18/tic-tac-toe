@@ -1,4 +1,4 @@
-# Strategic Tic-Tac-Toe
+# Tic-Tac-Toe
 
 A classic game of Tic-Tac-Toe rebuilt with a modern tech stack and a strategic twist.
 
