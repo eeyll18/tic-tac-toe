@@ -20,7 +20,7 @@ export const useTicTacToe = () => {
   );
 
   const handleSquareClick = (index: number) => {
-    if (winner || board[index]) return;
+    if (winner || isDraw) return;
 
     // joker hamle
     if (gamePhase === "AWAITING_MOVE") {
@@ -34,6 +34,8 @@ export const useTicTacToe = () => {
       }
       return;
     }
+
+    if (board[index]) return;
 
     // normal hamle
     const newBoard = [...board];
