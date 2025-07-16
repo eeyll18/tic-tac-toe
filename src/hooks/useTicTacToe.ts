@@ -12,6 +12,9 @@ export const useTicTacToe = () => {
     getRandomJokerIndex()
   );
   const [gamePhase, setGamePhase] = useState<GamePhase>("PLAYING");
+  const [revealedJokerIndex, setRevealedJokerIndex] = useState<number | null>(
+    null
+  );
 
   const winner = useMemo(() => calculateWinner(board), [board]);
   const isDraw = useMemo(
@@ -31,6 +34,7 @@ export const useTicTacToe = () => {
         setBoard(newBoard);
         setGamePhase("PLAYING");
         setCurrentPlayer(opponent); // sıra değişir
+        setRevealedJokerIndex(null);
       }
       return;
     }
@@ -42,10 +46,14 @@ export const useTicTacToe = () => {
     newBoard[index] = currentPlayer;
     setBoard(newBoard);
 
-    if (index === jokerSquareIndex) {
+    const opponent: Player = currentPlayer === "X" ? "O" : "X";
+    const canTriggerJokerPower = newBoard.includes(opponent);
+
+    if (index === jokerSquareIndex && canTriggerJokerPower) {
       setGamePhase("AWAITING_MOVE");
+      setRevealedJokerIndex(index);
     } else {
-      setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
+      setCurrentPlayer(opponent);
     }
   };
 
@@ -54,13 +62,14 @@ export const useTicTacToe = () => {
     setCurrentPlayer("X");
     setJokerSquareIndex(getRandomJokerIndex());
     setGamePhase("PLAYING");
+    setRevealedJokerIndex(null)
   };
 
   const status: string = useMemo(() => {
     if (winner) return `Kazanan: ${winner}`;
     if (isDraw) return "Oyun berabere!";
     if (gamePhase === "AWAITING_MOVE") {
-      return `Oyuncu ${currentPlayer}: Rakibin bir karesini ele geçir!`;
+      return `Joker bulundu! Oyuncu ${currentPlayer}: Rakibin bir karesini ele geçir!`;
     }
     return `Sıradaki oyuncu: ${currentPlayer}`;
   }, [winner, isDraw, gamePhase, currentPlayer]);
@@ -70,6 +79,7 @@ export const useTicTacToe = () => {
     currentPlayer,
     gamePhase,
     jokerSquareIndex,
+    revealedJokerIndex,
     handleSquareClick,
     resetGame,
     status,

@@ -3,7 +3,7 @@ import { GameStatus } from "./components/GameStatus";
 import { useTicTacToe } from "./hooks/useTicTacToe";
 
 function App() {
-  const { board, status, jokerSquareIndex, handleSquareClick, resetGame } =
+  const { board, status, revealedJokerIndex, handleSquareClick, resetGame } =
     useTicTacToe();
 
   return (
@@ -19,7 +19,7 @@ function App() {
         <Board
           squares={board}
           onClick={handleSquareClick}
-          jokerSquareIndex={jokerSquareIndex}
+          revealedJokerIndex={revealedJokerIndex}
         />
 
         <GameStatus status={status} onReset={resetGame} />
